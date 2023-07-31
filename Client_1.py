@@ -1,3 +1,4 @@
+# Client code
 import socket
 import struct
 
@@ -12,12 +13,17 @@ MCAST_PORT = 5004
 
 sockMulti = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sockMulti.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
 sockMulti.bind(('', MCAST_PORT))
-mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
 
+mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
 sockMulti.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
+# Broadcast
+UDP_IP = '127.0.0.1'  
+UDP_PORT = 5006
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client_socket.bind((UDP_IP, UDP_PORT))
 
 while True:
     # Unicast
@@ -26,9 +32,11 @@ while True:
     sock.sendto(message.encode(), server_address)
     # Menerima balasan dari server
     data, _ = sock.recvfrom(4096)
-    print('Menerima balasan dari server:', data.decode())
+    print(f"ini unicast : {data.decode()}")
     
     # Multicast
-    print(sockMulti.recv(10240))
-
+    print(f"ini unicast : {sockMulti.recv(10240)}")
     
+    # Broadcast
+    data, address = client_socket.recvfrom(1024)
+    print(f"Menerima data dari {address}: {data.decode()}")
