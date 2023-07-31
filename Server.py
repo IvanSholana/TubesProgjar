@@ -14,9 +14,9 @@ sockMulti = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sockMulti.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
 
 # Inisialisasi socket UDP (BroadCast)
-UDP_IP_1 = '127.0.0.1'  # Ganti dengan alamat IP tujuan unicast yang sesuai
-UDP_IP_2 = '127.0.0.2'  # Ganti dengan alamat IP tujuan unicast yang sesuai
-UDP_IP_3 = '127.0.0.3'  # Ganti dengan alamat IP tujuan unicast yang sesuai
+UDP_IP_1 = '127.0.0.1' 
+UDP_IP_2 = '127.0.0.2'  
+UDP_IP_3 = '127.0.0.3'  
 UDP_PORT = 5006
 broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
