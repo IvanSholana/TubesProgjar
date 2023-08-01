@@ -14,9 +14,9 @@ sockMulti = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sockMulti.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
 
 # Inisialisasi socket UDP (BroadCast)
-UDP_IP_1 = '127.0.0.1' 
-UDP_IP_2 = '127.0.0.2'  
-UDP_IP_3 = '127.0.0.3'  
+CLIENT_1 = '127.0.0.1' 
+CLIENT_2 = '127.0.0.2'  
+CLIENT_3 = '127.0.0.3'  
 UDP_PORT = 5006
 broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -24,15 +24,23 @@ while True:
     # Unicast
     print("Menunggu pesan dari client...")
     data, address = sock.recvfrom(4096)
-    print("Menerima pesan dari client:", data.decode())
-    # Mengirim balasan ke client
-    message = "Ini Pesan Unicast"
-    sock.sendto(message.encode(), address)
+    print(f"Menerima pesan dari client: {data.decode()}" )
+    # Mengirim ke Client - Client
+    if len(data.decode().split(',')) != 1:
+        split_data = data.decode().split(',')
+        message = split_data[0] 
+        destination_ip = split_data[1] 
+        print(destination_ip)
+        broadcast_socket.sendto(f"Ini Pesan pesan dari {address}".encode(), (destination_ip, UDP_PORT))
+    else:
+        # Jika hanya menerima pesan unicast
+        message = "Ini Pesan Unicast"
+        sock.sendto(message.encode(), address)
 
-    # Multicast
-    sockMulti.sendto("Ini Pesan Multicast".encode('utf-8'), (group, port))
+        # Multicast
+        sockMulti.sendto("Ini Pesan Multicast".encode('utf-8'), (group, port))
 
-    # Broadcast
-    broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (UDP_IP_1, UDP_PORT))
-    broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (UDP_IP_2, UDP_PORT))
-    broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (UDP_IP_3, UDP_PORT))
+        # Broadcast
+        broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (CLIENT_1, UDP_PORT))
+        broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (CLIENT_2, UDP_PORT))
+        broadcast_socket.sendto("Ini Pesan Broadcast".encode(), (CLIENT_3, UDP_PORT))

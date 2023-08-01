@@ -27,13 +27,23 @@ client_socket.bind((UDP_IP, UDP_PORT))
 
 while True:
     # Unicast
-    message = input('Masukkan pesan: ')
-    # Mengirim pesan ke server
-    sock.sendto(message.encode(), server_address)
-    # Menerima balasan dari server
-    data, _ = sock.recvfrom(4096)
-    print(f"ini unicast : {data.decode()}")
-    
+    tujuan = int(input("Masukkan tujuan pesan: \n1.Server\n2.Client 2\n3.Client 3\nPilihan : "))
+    if tujuan == 1:    
+        message = input('Masukkan pesan: ')
+        # Mengirim pesan ke server
+        sock.sendto(message.encode(), server_address)
+        # Menerima balasan dari server
+        data, _ = sock.recvfrom(4096)
+        print(f"ini unicast : {data.decode()}")
+    elif tujuan == 2:
+        message = input('Masukkan pesan: ')
+        # Mengirim pesan ke server
+        sock.sendto(f"{message},127.0.0.2".encode(), server_address)
+    elif tujuan == 3:
+        message = input('Masukkan pesan: ')
+        # Mengirim pesan ke server
+        sock.sendto(f"{message},127.0.0.3".encode(), server_address)
+        
     # Multicast
     print(f"ini unicast : {sockMulti.recv(10240)}")
     
