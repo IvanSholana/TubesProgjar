@@ -10,4 +10,4 @@ print("Client siap untuk menerima data...")
 
 while True:
     data, address = client_socket.recvfrom(1024)
-    print(f"Menerima data dari {address}: {data.decode()}")
+    print(data.decode())

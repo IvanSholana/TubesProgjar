@@ -19,7 +19,7 @@ mreq = struct.pack("4sl", socket.inet_aton(MCAST_GRP), socket.INADDR_ANY)
 sockMulti.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
 # Broadcast
-UDP_IP = '127.0.0.1'  
+UDP_IP = '127.0.0.4'  
 UDP_PORT = 5006
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,22 +31,23 @@ while True:
     if tujuan == 1:    
         message = input('Masukkan pesan: ')
         # Mengirim pesan ke server
-        sock.sendto(message.encode(), server_address)
+        sock.sendto(f"Client 1 : {message}".encode(), server_address)
         # Menerima balasan dari server
         data, _ = sock.recvfrom(4096)
         print(f"ini unicast : {data.decode()}")
     elif tujuan == 2:
         message = input('Masukkan pesan: ')
         # Mengirim pesan ke server
-        sock.sendto(f"{message},127.0.0.2".encode(), server_address)
+        sock.sendto(f"Client 1 : {message},127.0.0.2".encode(), server_address)
     elif tujuan == 3:
         message = input('Masukkan pesan: ')
         # Mengirim pesan ke server
-        sock.sendto(f"{message},127.0.0.3".encode(), server_address)
-        
-    # Multicast
-    print(f"ini unicast : {sockMulti.recv(10240)}")
+        sock.sendto(f"Client 1 : {message},127.0.0.3".encode(), server_address)
+    
+    if(sockMulti.recv(10240)):    
+        print(f"ini unicast : {sockMulti.recv(10240)}") # Multicast
     
     # Broadcast
-    data, address = client_socket.recvfrom(1024)
-    print(f"Menerima data dari {address}: {data.decode()}")
+    if(client_socket.recvfrom(1024)):
+        data, address = client_socket.recvfrom(1024)
+        print(f"Menerima data dari {address}: {data.decode()}")

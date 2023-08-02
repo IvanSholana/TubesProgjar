@@ -14,7 +14,7 @@ sockMulti = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sockMulti.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
 
 # Inisialisasi socket UDP (BroadCast)
-CLIENT_1 = '127.0.0.1' 
+CLIENT_1 = '127.0.0.4' 
 CLIENT_2 = '127.0.0.2'  
 CLIENT_3 = '127.0.0.3'  
 UDP_PORT = 5006
@@ -30,8 +30,7 @@ while True:
         split_data = data.decode().split(',')
         message = split_data[0] 
         destination_ip = split_data[1] 
-        print(destination_ip)
-        broadcast_socket.sendto(f"Ini Pesan pesan dari {address}".encode(), (destination_ip, UDP_PORT))
+        broadcast_socket.sendto(f"{message}".encode(), (destination_ip, UDP_PORT))
     else:
         # Jika hanya menerima pesan unicast
         message = "Ini Pesan Unicast"
